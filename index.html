@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR 卡片（极简版）</title>
+    <title>AR 卡片（有声版）</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; color: #fff; font-family: sans-serif; }
@@ -29,33 +29,35 @@
             background: rgba(0,0,0,0.5);
             padding: 10px 20px;
             border-radius: 8px;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
     <video id="camera" autoplay playsinline></video>
-    <video id="video" src="https://www.w3school.com.cn/i/movie.mp4" loop muted playsinline></video>
-    <div id="tip">请对准 marker.png，3 秒后自动播放视频</div>
+    <!-- 这里去掉了 muted，视频就有声音了 -->
+    <video id="video" src="https://www.w3school.com.cn/i/movie.mp4" loop playsinline></video>
+    <div id="tip">点击屏幕播放视频（带声音）</div>
 
     <script>
         const camera = document.getElementById('camera');
         const video = document.getElementById('video');
         const tip = document.getElementById('tip');
 
-        // 强制打开后置摄像头
+        // 打开摄像头
         navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'environment' }
         }).then(stream => {
             camera.srcObject = stream;
-            // 3 秒后自动播放视频（模拟识别成功）
-            setTimeout(() => {
-                tip.style.display = 'none';
-                video.style.display = 'block';
-                video.play();
-            }, 3000);
         }).catch(err => {
-            tip.textContent = '请在设置中允许浏览器使用摄像头';
-            console.error('摄像头错误:', err);
+            tip.textContent = '请允许摄像头权限';
+        });
+
+        // 点击屏幕播放视频（带声音）
+        document.body.addEventListener('click', () => {
+            tip.style.display = 'none';
+            video.style.display = 'block';
+            video.play();
         });
     </script>
 </body>
