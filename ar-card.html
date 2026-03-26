@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR 卡片</title>
+    <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.5/dist/ar.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+    </style>
+</head>
+<body>
+    <a-scene
+        arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        vr-mode-ui="enabled: false"
+    >
+        <a-marker type="pattern" url="marker.png">
+            <!-- 这里替换成你自己的视频地址 -->
+            <a-video
+                src="https://www.w3school.com.cn/i/movie.mp4"
+                width="2"
+                height="1.5"
+                position="0 0 0"
+                rotation="-90 0 0"
+                loop
+                autoplay
+                muted
+            ></a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
+</body>
+</html>
