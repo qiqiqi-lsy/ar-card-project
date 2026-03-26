@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR 卡片（有声版）</title>
+    <title>AR 卡片（你的视频版）</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; color: #fff; font-family: sans-serif; }
@@ -35,16 +35,16 @@
 </head>
 <body>
     <video id="camera" autoplay playsinline></video>
-    <!-- 这里去掉了 muted，视频就有声音了 -->
-    <video id="video" src="https://www.w3school.com.cn/i/movie.mp4" loop playsinline></video>
-    <div id="tip">点击屏幕播放视频（带声音）</div>
+    <!-- 这里已经换成你的视频 8.mp4，并且保留声音 -->
+    <video id="video" src="https://qiqiqi-lsy.github.io/ar-card-project/8.mp4" loop playsinline></video>
+    <div id="tip">点击屏幕播放你的视频（带声音）</div>
 
     <script>
         const camera = document.getElementById('camera');
         const video = document.getElementById('video');
         const tip = document.getElementById('tip');
 
-        // 打开摄像头
+        // 打开后置摄像头
         navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'environment' }
         }).then(stream => {
@@ -53,7 +53,7 @@
             tip.textContent = '请允许摄像头权限';
         });
 
-        // 点击屏幕播放视频（带声音）
+        // 点击屏幕播放视频
         document.body.addEventListener('click', () => {
             tip.style.display = 'none';
             video.style.display = 'block';
