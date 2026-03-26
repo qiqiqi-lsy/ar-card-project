@@ -2,24 +2,48 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>纯视频测试页</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <title>AR 卡片测试</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            background: #000;
-        }
-        video {
-            max-width: 100%;
-            max-height: 100vh;
-        }
+        body { margin: 0; overflow: hidden; background: #000; }
+        /* 增加加载提示，防止一直空白 */
+        .loading { color: white; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 999; }
     </style>
 </head>
 <body>
-    <video src="https://www.w3school.com.cn/i/movie.mp4" autoplay loop muted playsinline></video>
+    <div class="loading" id="loading">正在加载 AR...</div>
+    
+    <!-- 核心改动：使用稳定的 2.3.0 版本 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ar.js@2.3.0/aframe/build/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ar.js@2.3.0/ar.js/dist/ar.js"></script>
+
+    <a-scene arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;" id="arScene" style="display:none;">
+        <a-marker type="pattern" url="marker.png">
+            <a-video
+                src="https://www.w3school.com.cn/i/movie.mp4"
+                width="2" height="1.5"
+                position="0 0 0.1"
+                rotation="-90 0 0"
+                loop
+                autoplay
+                muted
+                playsinline
+            ></a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <script>
+        // 简单的加载逻辑，确保 AR 加载出来后才显示
+        window.addEventListener('load', function() {
+            document.getElementById('loading').innerText = "请允许摄像头权限...";
+            // 延迟显示 AR 场景，给浏览器一点准备时间
+            setTimeout(() => {
+                document.getElementById('arScene').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
