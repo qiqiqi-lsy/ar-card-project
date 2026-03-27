@@ -2,66 +2,41 @@
 <html>
 <head>
     <title>AR视频卡片</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.5/dist/aframe-ar-nft.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-        }
-        /* 调试红块，相机启动后自动消失 */
-        .debug-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            width: 100px;
-            height: 100px;
-            background: red;
-            transform: translate(-50%, -50%);
-            z-index: 999;
-        }
-        /* 相机画面铺满全屏 */
-        #cameraView {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1;
-        }
+        body { margin: 0; overflow: hidden; }
     </style>
 </head>
 <body>
-    <div class="debug-box"></div>
-    <video id="cameraView" autoplay playsinline muted></video>
+    <a-scene
+        vr-mode-ui="enabled: false"
+        arjs="sourceType: webcam; detectionMode: mono; maxDetectionRate: 30; trackingMethod: best;"
+        renderer="antialias: true; precision: medium;"
+    >
+        <a-nft
+            type="nft"
+            url="./marker"
+            smooth="true"
+            smoothCount="10"
+            smoothTolerance="0.01"
+            smoothThreshold="5"
+        >
+            <a-video
+                src="./8.mp4"
+                width="5"
+                height="3"
+                position="0 0 0"
+                rotation="-90 0 0"
+                loop="true"
+                autoplay="true"
+                playsinline="true"
+                volume="1"
+            ></a-video>
+        </a-nft>
 
-    <script>
-        // 点击屏幕后启动后置摄像头
-        document.addEventListener('click', async function () {
-            const video = document.getElementById('cameraView');
-            const debugBox = document.querySelector('.debug-box');
-
-            try {
-                // 强制使用后置摄像头
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'environment'
-                    }
-                });
-
-                video.srcObject = stream;
-                // 相机启动成功，隐藏红色调试块
-                debugBox.style.display = 'none';
-            } catch (err) {
-                alert('相机启动失败，请检查权限：' + err.message);
-            }
-        });
-    </script>
+        <a-entity camera look-controls></a-entity>
+    </a-scene>
 </body>
 </html>
