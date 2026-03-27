@@ -1,64 +1,42 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR 卡片（你的视频版）</title>
+<html>
+  <head>
+    <title>AR Card Video</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #000; color: #fff; font-family: sans-serif; }
-        #camera { 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            object-fit: cover; 
-        }
-        #video { 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            object-fit: cover; 
-            display: none; 
-            z-index: 10;
-        }
-        #tip { 
-            position: fixed; 
-            top: 50%; left: 50%; 
-            transform: translate(-50%, -50%); 
-            font-size: 18px;
-            background: rgba(0,0,0,0.5);
-            padding: 10px 20px;
-            border-radius: 8px;
-            pointer-events: none;
-        }
+      body { margin: 0; overflow: hidden; }
     </style>
-</head>
-<body>
-    <video id="camera" autoplay playsinline></video>
-    <!-- 这里已经换成你的视频 8.mp4，并且保留声音 -->
-    <video id="video" src="https://qiqiqi-lsy.github.io/ar-card-project/8.mp4" loop playsinline></video>
-    <div id="tip">点击屏幕播放你的视频（带声音）</div>
+  </head>
+  <body>
+    <a-scene
+      vr-mode-ui="enabled: false"
+      arjs="sourceType: webcam; detectionMode: mono; maxDetectionRate: 30;"
+      renderer="logDepthBuffer: true;"
+    >
+      <!-- NFT Marker 追踪器 -->
+      <a-nft
+        type="nft"
+        url="./marker"
+        smooth="true"
+        smoothCount="10"
+        smoothTolerance="0.01"
+        smoothThreshold="5"
+      >
+        <!-- 要叠加的视频 -->
+        <a-video
+          src="./8.mp4"
+          width="5"
+          height="3"
+          position="0 0 0"
+          rotation="-90 0 0"
+          loop="true"
+          autoplay="true"
+          playsinline="true"
+        ></a-video>
+      </a-nft>
 
-    <script>
-        const camera = document.getElementById('camera');
-        const video = document.getElementById('video');
-        const tip = document.getElementById('tip');
-
-        // 打开后置摄像头
-        navigator.mediaDevices.getUserMedia({
-            video: { facingMode: 'environment' }
-        }).then(stream => {
-            camera.srcObject = stream;
-        }).catch(err => {
-            tip.textContent = '请允许摄像头权限';
-        });
-
-        // 点击屏幕播放视频
-        document.body.addEventListener('click', () => {
-            tip.style.display = 'none';
-            video.style.display = 'block';
-            video.play();
-        });
-    </script>
-</body>
+      <a-entity camera look-controls></a-entity>
+    </a-scene>
+  </body>
 </html>
