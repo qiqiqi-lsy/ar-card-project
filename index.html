@@ -1,33 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AR跟随视频</title>
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+  <title>AR Video Card</title>
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.min.js"></script>
   <style>
     body { margin: 0; padding: 0; overflow: hidden; }
   </style>
 </head>
 <body>
   <a-scene
+    arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best;"
     vr-mode-ui="enabled: false"
-    arjs="sourceType: webcam;
-           detectionMode: mono;
-           trackingMethod: best;
-           sourceWidth: 1280;
-           sourceHeight: 720;"
+    renderer="antialias: true"
   >
     <a-nft type="nft" url="./marker" smooth="true" smoothCount="5">
       <a-video
         src="./8.mp4"
-        width="5" height="3"
+        width="5"
+        height="3"
         position="0 0 0"
         rotation="-90 0 0"
-        loop="true"
-        autoplay="true"
-        playsinline="true"
-        volume="1"
+        loop
+        autoplay
+        playsinline
       ></a-video>
     </a-nft>
 
@@ -35,11 +33,10 @@
   </a-scene>
 
   <script>
-    // 手机必须点击一次才能播放视频
     document.addEventListener('click', () => {
-      const video = document.querySelector('a-video');
-      if (video && video.components.material.material.map) {
-        video.components.material.material.map.image.play();
+      const vidEl = document.querySelector('a-video');
+      if (vidEl && vidEl.components.material?.material?.map?.image) {
+        vidEl.components.material.material.map.image.play();
       }
     });
   </script>
