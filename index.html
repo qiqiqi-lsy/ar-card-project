@@ -1,45 +1,43 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>AR Card Video</title>
-    <!-- A-Frame 基础库 -->
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
-    <!-- 提速版 AR.js NFT 库（替换了原 githack 源，国内访问更快） -->
-    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@1.4.2/aframe/build/aframe-ar-nft.min.js"></script>
-    <style>
-      body { margin: 0; overflow: hidden; }
-    </style>
-  </head>
-  <body>
-    <a-scene
-      vr-mode-ui="enabled: false"
-      arjs="sourceType: webcam; detectionMode: mono; maxDetectionRate: 30;"
-      renderer="logDepthBuffer: true;"
-    >
-      <!-- NFT 追踪器（匹配你的 marker 文件） -->
-      <a-nft
-        type="nft"
-        url="./marker"
-        smooth="true"
-        smoothCount="10"
-        smoothTolerance="0.01"
-        smoothThreshold="5"
-      >
-        <!-- 叠加在照片上的视频 -->
-        <a-video
-          src="./8.mp4"
-          width="5"
-          height="3"
-          position="0 0 0"
-          rotation="-90 0 0"
-          loop="true"
-          autoplay="true"
-          playsinline="true"
-        ></a-video>
-      </a-nft>
+<head>
+  <title>AR Card</title>
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@1.4.2/aframe/build/aframe-ar-nft.min.js"></script>
+  <style>
+    /* 强制让页面占满屏幕 */
+    html, body { margin: 0; padding: 0; height: 100%; width: 100%; }
+    /* 先显示一个红色方块，确认场景加载 */
+    .debug-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      background: red;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <!-- 调试用红色方块：如果这个都不显示，说明页面根本没加载 -->
+  <div class="debug-box"></div>
 
-      <!-- 相机控制 -->
-      <a-entity camera look-controls></a-entity>
-    </a-scene>
-  </body>
+  <a-scene
+    arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best;"
+    vr-mode-ui="enabled: false"
+    renderer="antialias: true;"
+  >
+    <a-nft type="nft" url="./marker" smooth="true">
+      <a-video
+        src="./8.mp4"
+        width="5" height="3"
+        position="0 0 0" rotation="-90 0 0"
+        loop="true" autoplay="true" playsinline="true"
+      ></a-video>
+    </a-nft>
+    <a-entity camera look-controls></a-entity>
+  </a-scene>
+</body>
 </html>
