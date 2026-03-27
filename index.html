@@ -1,46 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AR Camera Test</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { width: 100vw; height: 100vh; }
-    /* 红方块还留着，确认页面加载 */
-    .debug {
-      position: fixed; top: 50%; left: 50%;
-      width: 100px; height: 100px;
-      background: red;
-      transform: translate(-50%, -50%);
-      z-index: 1000;
-    }
-    /* 相机预览容器 */
-    #video-container {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      z-index: 1;
-    }
-  </style>
+    <title>AR视频卡片</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        /* 调试红块，相机启动后自动消失 */
+        .debug-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: red;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+        }
+        /* 相机画面铺满全屏 */
+        #cameraView {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
-  <div class="debug"></div>
-  <video id="video-container" autoplay playsinline></video>
+    <div class="debug-box"></div>
+    <video id="cameraView" autoplay playsinline muted></video>
 
-  <script>
-    // 页面加载后，点击屏幕强制启动相机
-    document.addEventListener('click', async () => {
-      const video = document.getElementById('video-container');
-      try {
-        // 强制请求相机权限
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-        // 相机启动后，隐藏红方块
-        document.querySelector('.debug').style.display = 'none';
-        alert('相机已启动！现在对准你的 marker.png 照片，等待识别后视频会出现。');
-      } catch (err) {
-        alert('相机启动失败：' + err.message + '，请在浏览器设置中手动开启相机权限。');
-      }
-    });
-  </script>
+    <script>
+        // 点击屏幕后启动后置摄像头
+        document.addEventListener('click', async function () {
+            const video = document.getElementById('cameraView');
+            const debugBox = document.querySelector('.debug-box');
+
+            try {
+                // 强制使用后置摄像头
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment'
+                    }
+                });
+
+                video.srcObject = stream;
+                // 相机启动成功，隐藏红色调试块
+                debugBox.style.display = 'none';
+            } catch (err) {
+                alert('相机启动失败，请检查权限：' + err.message);
+            }
+        });
+    </script>
 </body>
 </html>
