@@ -1,42 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AR视频卡片</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.5/dist/aframe-ar-nft.js"></script>
-    <style>
-        body { margin: 0; overflow: hidden; }
-    </style>
+  <title>AR视频卡片</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.5/dist/aframe-ar-nft.js"></script>
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; }
+    a-scene { display: none; }
+    #startBtn {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 16px 32px;
+      font-size: 18px;
+      background: #007aff;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      z-index: 9999;
+    }
+  </style>
 </head>
 <body>
-    <a-scene
-        vr-mode-ui="enabled: false"
-        arjs="sourceType: webcam; detectionMode: mono; maxDetectionRate: 30; trackingMethod: best;"
-        renderer="antialias: true; precision: medium;"
-    >
-        <a-nft
-            type="nft"
-            url="./marker"
-            smooth="true"
-            smoothCount="10"
-            smoothTolerance="0.01"
-            smoothThreshold="5"
-        >
-            <a-video
-                src="./8.mp4"
-                width="5"
-                height="3"
-                position="0 0 0"
-                rotation="-90 0 0"
-                loop="true"
-                autoplay="true"
-                playsinline="true"
-                volume="1"
-            ></a-video>
-        </a-nft>
+  <button id="startBtn">点击启动AR相机</button>
+  <a-scene
+    vr-mode-ui="enabled: false"
+    arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; cameraParametersUrl: https://ar-js-org.github.io/AR.js-DATA/data/camera_para.dat;"
+    renderer="antialias: true; precision: medium;"
+  >
+    <a-nft type="nft" url="./marker" smooth="true">
+      <a-video
+        src="./8.mp4"
+        width="5" height="3"
+        position="0 0 0"
+        rotation="-90 0 0"
+        loop="true"
+        autoplay="true"
+        playsinline="true"
+        volume="1"
+      ></a-video>
+    </a-nft>
+    <a-entity camera look-controls></a-entity>
+  </a-scene>
 
-        <a-entity camera look-controls></a-entity>
-    </a-scene>
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const scene = document.querySelector('a-scene');
+
+    startBtn.addEventListener('click', () => {
+      startBtn.style.display = 'none';
+      scene.style.display = 'block';
+      // 手动触发AR场景初始化
+      scene.initialize();
+    });
+  </script>
 </body>
 </html>
