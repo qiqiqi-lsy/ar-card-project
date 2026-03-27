@@ -1,44 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-  <title>AR Video Card</title>
-  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <title>AR Card</title>
+  <!-- 最稳定不白屏的CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/ar.js@2.2.2/dist/ar-nft.min.js"></script>
   <style>
-    body { margin: 0; padding: 0; overflow: hidden; }
+    * { margin: 0; padding: 0; }
+    body { overflow: hidden; background: #000; }
+    #arjs-video { position: fixed; width: 100%; height: 100%; object-fit: cover; }
   </style>
 </head>
 <body>
-  <a-scene
-    arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best;"
-    vr-mode-ui="enabled: false"
-    renderer="antialias: true"
-  >
-    <a-nft type="nft" url="./marker" smooth="true" smoothCount="5">
-      <a-video
-        src="./8.mp4"
-        width="5"
-        height="3"
-        position="0 0 0"
-        rotation="-90 0 0"
-        loop
-        autoplay
-        playsinline
-      ></a-video>
-    </a-nft>
-
-    <a-entity camera look-controls></a-entity>
-  </a-scene>
+  <video id="arjs-video" autoplay playsinline muted></video>
 
   <script>
-    document.addEventListener('click', () => {
-      const vidEl = document.querySelector('a-video');
-      if (vidEl && vidEl.components.material?.material?.map?.image) {
-        vidEl.components.material.material.map.image.play();
-      }
+    const video = document.getElementById('arjs-video');
+    const api = new ARnft({
+      video: video,
+      canvas: document.createElement('canvas'),
+      matrixCodeType: '3x3',
+      cameraParametersUrl: 'https://raw.githubusercontent.com/artoolkitx/artoolkit5-js/master/build/Data/camera_para.dat',
+      markerUrl: 'https://raw.githubusercontent.com/qiqiqi-lsy/ar-card-project/main/markers/marker'
     });
+
+    api.onMarkerFound = () => {
+      console.log('识别到标记');
+    };
+
+    api.onMarkerLost = () => {
+      console.log('标记丢失');
+    };
   </script>
 </body>
 </html>
