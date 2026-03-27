@@ -2,8 +2,10 @@
 <html>
   <head>
     <title>AR Card Video</title>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <!-- A-Frame 基础库 -->
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
+    <!-- 提速版 AR.js NFT 库（替换了原 githack 源，国内访问更快） -->
+    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@1.4.2/aframe/build/aframe-ar-nft.min.js"></script>
     <style>
       body { margin: 0; overflow: hidden; }
     </style>
@@ -14,7 +16,7 @@
       arjs="sourceType: webcam; detectionMode: mono; maxDetectionRate: 30;"
       renderer="logDepthBuffer: true;"
     >
-      <!-- NFT Marker 追踪器 -->
+      <!-- NFT 追踪器（匹配你的 marker 文件） -->
       <a-nft
         type="nft"
         url="./marker"
@@ -23,7 +25,7 @@
         smoothTolerance="0.01"
         smoothThreshold="5"
       >
-        <!-- 要叠加的视频 -->
+        <!-- 叠加在照片上的视频 -->
         <a-video
           src="./8.mp4"
           width="5"
@@ -36,6 +38,7 @@
         ></a-video>
       </a-nft>
 
+      <!-- 相机控制 -->
       <a-entity camera look-controls></a-entity>
     </a-scene>
   </body>
